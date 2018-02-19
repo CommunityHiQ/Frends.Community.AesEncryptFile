@@ -26,7 +26,7 @@ namespace Frends.Community.AesEncryptFile
         /// <summary>
         /// File to encrypt
         /// </summary>
-        [DefaultValue("c:\temp\file_to_encrypt.txt")]
+        [DefaultValue("c:\\temp\\file_to_encrypt.txt")]
         [DefaultDisplayType(DisplayType.Text)]
         public string SourceFile { get; set; }
     }

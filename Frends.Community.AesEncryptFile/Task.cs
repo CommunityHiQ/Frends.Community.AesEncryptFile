@@ -9,7 +9,7 @@ namespace Frends.Community.AesEncryptFile
     public class Task
     {
         /// <summary>
-        /// Encrypt a file using given options. Result file is prefixed with IV bytes.
+        /// Encrypt a file with AES. Result file is prefixed with IV bytes.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>
