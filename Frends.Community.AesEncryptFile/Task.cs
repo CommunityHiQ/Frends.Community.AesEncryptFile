@@ -93,7 +93,7 @@ namespace Frends.Community.AesEncryptFile
                 }
 
                 // derive Key and IV bytes
-                var pbkdf2 = new Rfc2898DeriveBytes(options.Password, 16);
+                var pbkdf2 = new Rfc2898DeriveBytes(options.Password, options.SaltSize);
                 aes.Key = pbkdf2.GetBytes(aes.KeySize / 8);
                 aes.IV = pbkdf2.Salt;
                 
