@@ -50,11 +50,11 @@ namespace Frends.Community.AesEncryptFile.Tests
 
 
         [TestMethod]
-        public void Encrypt_ShouldEncryptFile()
+        public void Encrypt_ShouldEncryptFile_OpenSSLTest()
         {
             Output result = Task.Encrypt(
                 new Input { SourceFile = $@"C:\temp\VM-jako\TEST.txt" },
-                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "1234", PaddingMode = Padding.PKCS7 });
+                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
 
             FileInfo fi = new FileInfo(result.OutputPath);
 
