@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 using Frends.Tasks.Attributes;
 
@@ -38,7 +39,7 @@ namespace Frends.Community.AesEncryptFile
             // if destination file is not given, create a new file to the source file location with a new guid as its name
             // otherwise use Options.DestinationFile
             string destinationFile = string.IsNullOrWhiteSpace(options.DestinationFile)
-                ? Path.Combine(sourceFileInfo.DirectoryName, Guid.NewGuid().ToString())
+                ? Path.Combine(sourceFileInfo.DirectoryName, "test.enc")
                 : options.DestinationFile;
 
             using (var fileReader = new FileStream(input.SourceFile, FileMode.Open, FileAccess.Read))
@@ -92,26 +93,36 @@ namespace Frends.Community.AesEncryptFile
                         break;
                 }
 
+                byte[] saltBytes = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
                 // derive Key and IV bytes
-                var pbkdf2 = new Rfc2898DeriveBytes(options.Password, options.SaltSize);
+                Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(options.Password, saltBytes, 10000);
                 aes.Key = pbkdf2.GetBytes(aes.KeySize / 8);
-                aes.IV = pbkdf2.Salt;
+                aes.IV = pbkdf2.GetBytes(aes.BlockSize / 8);
                 
+
+                
+                byte[] salted = Encoding.ASCII.GetBytes("Salted__");
+
                 using (var fileWriter = new FileStream(destinationFile, FileMode.Create))
                 using (var cs = new CryptoStream(fileWriter, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
-                    // write IV first
-                    fileWriter.Write(aes.IV, 0, aes.IV.Length);
+                    // Write "Salted__" first
+                    fileWriter.Write(salted, 0, salted.Length);
 
+                    // Then saltBytes
+                    fileWriter.Write(saltBytes, 0, saltBytes.Length);
+                    
                     // read & write 1mb at a time
                     var buffer = new byte[1048576];
                     int data;
-
+                    
                     // read source file contents and crypt it to destination file
                     while ((data = fileReader.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         cs.Write(buffer, 0, data);
                     }
+                    cs.FlushFinalBlock();
+                    cs.Close();
                 }
             }
 

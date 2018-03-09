@@ -47,5 +47,24 @@ namespace Frends.Community.AesEncryptFile.Tests
 
             Assert.IsTrue(fi.Exists);
         }
+
+
+        [TestMethod]
+        public void Encrypt_ShouldEncryptFile()
+        {
+            Output result = Task.Encrypt(
+                new Input { SourceFile = $@"C:\temp\VM-jako\TEST.txt" },
+                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "1234", PaddingMode = Padding.PKCS7 });
+
+            FileInfo fi = new FileInfo(result.OutputPath);
+
+            Assert.IsTrue(fi.Exists);
+
+
+            
+        }
+
+
+
     }
 }

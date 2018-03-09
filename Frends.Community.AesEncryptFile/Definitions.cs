@@ -61,12 +61,7 @@ namespace Frends.Community.AesEncryptFile
         /// </summary>
         [DefaultValue(KeySize.AES256)]
         public KeySize KeySize { get; set; }
-
-        /// <summary>
-        /// Possible salt sizes: 8, 16
-        /// </summary>
-        [DefaultValue(8)]
-        public int SaltSize { get; set; }
+        
     }
 
     public class Output
