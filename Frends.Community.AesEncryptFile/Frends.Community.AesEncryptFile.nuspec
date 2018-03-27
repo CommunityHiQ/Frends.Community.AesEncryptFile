@@ -6,13 +6,26 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <licenseUrl>https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
-    <copyright>Copyright 2018</copyright>
-    <tags>Tag1 Tag2</tags>
+    <copyright>HiQ Finland</copyright>
+    <tags>Frends4 AES</tags>
+    <dependencies>
+      <group targetFramework="net452">
+        <dependency id="Frends.Tasks.Attributes" version="1.2.0" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="net452" />
+      <frameworkAssembly assemblyName="System.ComponentModel" targetFramework="net452" />
+      <frameworkAssembly assemblyName="System.IO" targetFramework="net452"/>
+      <frameworkAssembly assemblyName="System.Security.Cryptography" targetFramework="net452" />
+    </frameworkAssemblies>
   </metadata>
+  <files>
+    <file src="bin\Release\Frends.Community.AesEncryptFile.dll" target="lib\net452\Frends.Community.AesEncryptFile.dll" />
+    <file src="FrendsTaskMetadata.json" target="FrendsTaskMetadata.json" />
+  </files>
 </package>
