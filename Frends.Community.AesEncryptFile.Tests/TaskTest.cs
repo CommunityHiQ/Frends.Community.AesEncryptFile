@@ -56,8 +56,7 @@ namespace Frends.Community.AesEncryptFile.Tests
         [TestMethod]
         public void Encrypt_ShouldEncryptFile_OpenSSLTest()
         {
-            try
-            { 
+            
             Output result = Task.Encrypt(
                 new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
                 new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
@@ -66,18 +65,25 @@ namespace Frends.Community.AesEncryptFile.Tests
 
             Assert.IsTrue(fi.Exists);
 
-                
-            }
-            finally
-            {
-               File.Delete(fi);
-            }
-
-
 
         }
 
-      
+        [TestCleanup]
+        public void Cleanup()
+        {
+            System.IO.DirectoryInfo di = new DirectoryInfo($@"{AppDomain.CurrentDomain.BaseDirectory}\..\..\..\TestResults\");
+            
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.EnumerateDirectories())
+            {
+                dir.Delete(true);
+            }
+
+        }
 
 
 
