@@ -34,3 +34,5 @@ You can install the task via FRENDS UI Task View or you can find the nuget packa
 | CipherMode | Cipher | CipherMode to use when encrypting a file, when unsure, use CBC | CBC |
 | PaddingMode| Padding | Padding mode to use when encrypting a file, when unsure, use PKCS7 | PKCS7 |
 | KeySize | KeySize | Key size for file encryption, when unsure, use 256 | AES256 |
+| ByteArrayLength | Int | Array length used in defining the salt byte array of encryption. When Decrypting by OpenSSL, use 8 | 8 |
+| DecryptionMethod | String | Defines how the encrypted file is planned to be decrypted, when unsure, use Other | Other |
