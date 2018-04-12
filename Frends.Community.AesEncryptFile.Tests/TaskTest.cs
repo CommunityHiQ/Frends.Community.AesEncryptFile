@@ -31,7 +31,7 @@ namespace Frends.Community.AesEncryptFile.Tests
         {
             Output result = Task.Encrypt(
                 new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { CipherMode = Cipher.ECB, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.ThirtyTwo, DecryptionMethod = DecryptionMethod.Other });
+                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256ECB.ed", CipherMode = Cipher.ECB, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.ThirtyTwo, DecryptionMethod = DecryptionMethod.Other });
 
             FileInfo fi = new FileInfo(result.OutputPath);
 
@@ -43,7 +43,7 @@ namespace Frends.Community.AesEncryptFile.Tests
         {
             Output result = Task.Encrypt(
                 new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.SixtyFour, DecryptionMethod = DecryptionMethod.Other });
+                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256CBC.ed", CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.SixtyFour, DecryptionMethod = DecryptionMethod.Other });
 
             FileInfo fi = new FileInfo(result.OutputPath);
 
@@ -59,7 +59,7 @@ namespace Frends.Community.AesEncryptFile.Tests
             
             Output result = Task.Encrypt(
                 new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
+                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_OpenSSL.ed", CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
 
             FileInfo fi = new FileInfo(result.OutputPath);
 
@@ -71,17 +71,20 @@ namespace Frends.Community.AesEncryptFile.Tests
         [TestCleanup]
         public void Cleanup()
         {
-            System.IO.DirectoryInfo di = new DirectoryInfo($@"{AppDomain.CurrentDomain.BaseDirectory}\..\..\..\TestResults\");
-            
 
-            foreach (FileInfo file in di.GetFiles())
+            // AppDomain.CurrentDomain.BaseDirectory refers to Frends.Community.AesEncrypt.Tests\bin\Debug(or Release)\ -folder
+            System.IO.DirectoryInfo di2 = new DirectoryInfo($@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles");
+
+            foreach (FileInfo filee in di2.GetFiles())
             {
-                file.Delete();
+                if (System.IO.Path.GetFileName(filee.FullName) != "SourceFile.txt")
+                {
+                    filee.Delete();
+                }
+
             }
-            foreach (DirectoryInfo dir in di.EnumerateDirectories())
-            {
-                dir.Delete(true);
-            }
+
+
 
         }
 
