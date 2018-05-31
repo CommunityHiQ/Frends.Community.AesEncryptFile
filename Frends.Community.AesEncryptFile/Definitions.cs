@@ -18,6 +18,16 @@ namespace Frends.Community.AesEncryptFile
     /// Cipher to use for encryption
     /// </summary>
     public enum Cipher { CBC, ECB }
+
+    /// <summary>
+    /// Byte array length used for salt
+    /// </summary>
+    public enum ByteArrayLength { Eight=8, Sixteen=16, ThirtyTwo=32, SixtyFour=64 }
+
+    /// <summary>
+    /// Decryption target
+    /// </summary>
+    public enum DecryptionMethod { OpenSSL, Other }
     #endregion
 
     #region Classes
@@ -61,6 +71,19 @@ namespace Frends.Community.AesEncryptFile
         /// </summary>
         [DefaultValue(KeySize.AES256)]
         public KeySize KeySize { get; set; }
+
+        /// <summary>
+        /// Possible options: 8, 16, 32, 64
+        /// </summary>
+        [DefaultValue(ByteArrayLength.Eight)]
+        public ByteArrayLength ByteArrayLength { get; set; }
+
+        /// <summary>
+        /// Possible options: OpenSSL, Other
+        /// </summary>
+        [DefaultValue(DecryptionMethod.Other)]
+        public DecryptionMethod DecryptionMethod { get; set; }
+
     }
 
     public class Output

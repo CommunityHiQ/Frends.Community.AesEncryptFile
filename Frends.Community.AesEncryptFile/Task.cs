@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 using Frends.Tasks.Attributes;
 
@@ -9,7 +10,7 @@ namespace Frends.Community.AesEncryptFile
     public class Task
     {
         /// <summary>
-        /// Encrypt a file with AES. Result file is prefixed with IV bytes.
+        /// Encrypt a file with AES. Result file is prefixed with random generated salt bytes. "Salted__" is added if OpenSSL is chosen.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>
@@ -41,6 +42,8 @@ namespace Frends.Community.AesEncryptFile
                 ? Path.Combine(sourceFileInfo.DirectoryName, Guid.NewGuid().ToString())
                 : options.DestinationFile;
 
+            
+
             using (var fileReader = new FileStream(input.SourceFile, FileMode.Open, FileAccess.Read))
             using (var aes = new AesManaged())
             {
@@ -57,9 +60,9 @@ namespace Frends.Community.AesEncryptFile
                         aes.Mode = CipherMode.ECB;
                         break;
                 }
-                
+
                 // set key size
-                switch(options.KeySize)
+                switch (options.KeySize)
                 {
                     case KeySize.AES128:
                         aes.KeySize = 128;
@@ -73,7 +76,7 @@ namespace Frends.Community.AesEncryptFile
                 }
 
                 // set padding mode
-                switch(options.PaddingMode)
+                switch (options.PaddingMode)
                 {
                     case Padding.ANSIX923:
                         aes.Padding = PaddingMode.ANSIX923;
@@ -92,25 +95,63 @@ namespace Frends.Community.AesEncryptFile
                         break;
                 }
 
-                // derive Key and IV bytes
-                var pbkdf2 = new Rfc2898DeriveBytes(options.Password, 16);
-                aes.Key = pbkdf2.GetBytes(aes.KeySize / 8);
-                aes.IV = pbkdf2.Salt;
-                
-                using (var fileWriter = new FileStream(destinationFile, FileMode.Create))
-                using (var cs = new CryptoStream(fileWriter, aes.CreateEncryptor(), CryptoStreamMode.Write))
+               // set byte array length
+               int byteArrayLength = 0;
+               switch (options.ByteArrayLength)
+               {
+                   case ByteArrayLength.Eight:
+                       byteArrayLength = 8;
+                       break;
+                   case ByteArrayLength.Sixteen:
+                       byteArrayLength = 16;
+                       break;
+                   case ByteArrayLength.ThirtyTwo:
+                       byteArrayLength = 32;
+                       break;
+                   case ByteArrayLength.SixtyFour:
+                       byteArrayLength = 64;
+                       break;
+                }
+
+
+
+                using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
                 {
-                    // write IV first
-                    fileWriter.Write(aes.IV, 0, aes.IV.Length);
+                    
+                    byte[] saltBytes = new byte[byteArrayLength];
+                    rng.GetBytes(saltBytes);
 
-                    // read & write 1mb at a time
-                    var buffer = new byte[1048576];
-                    int data;
+                    // derive Key and IV bytes
+                    Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(options.Password, saltBytes, 10000);
+                    aes.Key = pbkdf2.GetBytes(aes.KeySize / 8);
+                    aes.IV = pbkdf2.GetBytes(aes.BlockSize / 8);
 
-                    // read source file contents and crypt it to destination file
-                    while ((data = fileReader.Read(buffer, 0, buffer.Length)) > 0)
+                    byte[] salted = Encoding.ASCII.GetBytes("Salted__");
+
+                    using (var fileWriter = new FileStream(destinationFile, FileMode.Create))
+                    using (var cs = new CryptoStream(fileWriter, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-                        cs.Write(buffer, 0, data);
+
+                        if (options.ByteArrayLength == ByteArrayLength.Eight && options.DecryptionMethod == DecryptionMethod.OpenSSL)
+                        {
+                            // Write "Salted__" first if decryption is done by OpenSSL and eight bytes are selected
+                            fileWriter.Write(salted, 0, salted.Length);
+                        }
+
+                        // Then saltBytes
+                        fileWriter.Write(saltBytes, 0, saltBytes.Length);
+
+                        // read & write 1mb at a time
+                        var buffer = new byte[1048576];
+                        int data;
+
+                        // read source file contents and crypt it to destination file
+                        while ((data = fileReader.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            cs.Write(buffer, 0, data);
+                        }
+                        cs.FlushFinalBlock();
+                        cs.Close();
                     }
                 }
             }
