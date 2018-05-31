@@ -84,6 +84,10 @@ namespace Frends.Community.AesEncryptFile.Tests
 
             }
 
+            var di1 = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..", "TestResults"));
+
+            if (di1.Exists)
+                Directory.Delete(di1.FullName, true);
 
 
         }
