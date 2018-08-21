@@ -2,22 +2,24 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.ComponentModel;
 
-using Frends.Tasks.Attributes;
+#pragma warning disable 1591
 
 namespace Frends.Community.AesEncryptFile
 {
-    public class Task
+    public class AesEncryptTask
     {
         /// <summary>
-        /// Encrypt a file with AES. Result file is prefixed with random generated salt bytes. "Salted__" is added if OpenSSL is chosen.
+        /// Encrypt a file with AES. Result file is prefixed with random generated salt bytes. Random GUID is used as filename if nothing is specified. "Salted__" is added to 
+        /// filename if OpenSSL is chosen as a decryption method.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static Output Encrypt(
-            [CustomDisplay(DisplayOption.Tab)] Input input,
-            [CustomDisplay(DisplayOption.Tab)] Options options)
+        public static Output AesEncryptFile(
+            [PropertyTab] Input input,
+            [PropertyTab] Options options)
         {
             var result = new Output();
             FileInfo sourceFileInfo = new FileInfo(input.SourceFile);
@@ -31,18 +33,17 @@ namespace Frends.Community.AesEncryptFile
             {
                 throw new ArgumentException("Source file does not exist!", "Input.SourcePath");
             }
-            if(string.IsNullOrWhiteSpace(options.Password))
+            if(string.IsNullOrWhiteSpace(input.Password))
             {
                 throw new ArgumentException("Options.Password was not properly defined", "Options.SourcePath");
             }
 
             // if destination file is not given, create a new file to the source file location with a new guid as its name
             // otherwise use Options.DestinationFile
-            string destinationFile = string.IsNullOrWhiteSpace(options.DestinationFile)
+            string destinationFile = string.IsNullOrWhiteSpace(input.DestinationFile)
                 ? Path.Combine(sourceFileInfo.DirectoryName, Guid.NewGuid().ToString())
-                : options.DestinationFile;
+                : input.DestinationFile;
 
-            
 
             using (var fileReader = new FileStream(input.SourceFile, FileMode.Open, FileAccess.Read))
             using (var aes = new AesManaged())
@@ -113,16 +114,13 @@ namespace Frends.Community.AesEncryptFile
                        break;
                 }
 
-
-
                 using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
                 {
-                    
                     byte[] saltBytes = new byte[byteArrayLength];
                     rng.GetBytes(saltBytes);
 
                     // derive Key and IV bytes
-                    Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(options.Password, saltBytes, 10000);
+                    Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(input.Password, saltBytes, 10000);
                     aes.Key = pbkdf2.GetBytes(aes.KeySize / 8);
                     aes.IV = pbkdf2.GetBytes(aes.BlockSize / 8);
 
@@ -131,7 +129,6 @@ namespace Frends.Community.AesEncryptFile
                     using (var fileWriter = new FileStream(destinationFile, FileMode.Create))
                     using (var cs = new CryptoStream(fileWriter, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-
                         if (options.ByteArrayLength == ByteArrayLength.Eight && options.DecryptionMethod == DecryptionMethod.OpenSSL)
                         {
                             // Write "Salted__" first if decryption is done by OpenSSL and eight bytes are selected

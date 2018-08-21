@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using Frends.Tasks.Attributes;
 
+#pragma warning disable 1591
+
 namespace Frends.Community.AesEncryptFile
 {
     #region Enumerations
@@ -39,12 +41,9 @@ namespace Frends.Community.AesEncryptFile
         [DefaultValue("c:\\temp\\file_to_encrypt.txt")]
         [DefaultDisplayType(DisplayType.Text)]
         public string SourceFile { get; set; }
-    }
 
-    public class Options
-    {
         /// <summary>
-        /// If set, will write the encrypted file to this path and overwrite possible existing file
+        /// If set, will write the encrypted file to this path and overwrite possible existing file, othervice random GUID is used.
         /// </summary>
         public string DestinationFile { get; set; }
 
@@ -54,6 +53,10 @@ namespace Frends.Community.AesEncryptFile
         [PasswordPropertyText]
         public string Password { get; set; }
 
+    }
+
+    public class Options
+    {
         /// <summary>
         /// Cipher mode to use
         /// </summary>
@@ -83,7 +86,6 @@ namespace Frends.Community.AesEncryptFile
         /// </summary>
         [DefaultValue(DecryptionMethod.Other)]
         public DecryptionMethod DecryptionMethod { get; set; }
-
     }
 
     public class Output
