@@ -1,7 +1,7 @@
 ﻿{
   "Tasks": [
     {
-      "TaskMethod": "Frends.Community.AesEncryptFile.Task.AesEncryptFile"
+      "TaskMethod": "Frends.Community.AesEncryptFile.AesEncryptTask.AesEncryptFile"
     }
   ]
 }

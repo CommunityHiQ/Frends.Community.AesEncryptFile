@@ -16,7 +16,7 @@ namespace Frends.Community.AesEncryptFile
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>
-        /// <returns></returns>
+        /// <returns>Object {string OutputPath }  </returns>
         public static Output AesEncryptFile(
             [PropertyTab] Input input,
             [PropertyTab] Options options)

@@ -43,7 +43,7 @@ namespace Frends.Community.AesEncryptFile
         public string SourceFile { get; set; }
 
         /// <summary>
-        /// If set, will write the encrypted file to this path and overwrite possible existing file, othervice random GUID is used.
+        /// Use random GUID if not set. If file allready exsits it will be overwriten.
         /// </summary>
         public string DestinationFile { get; set; }
 
@@ -58,31 +58,32 @@ namespace Frends.Community.AesEncryptFile
     public class Options
     {
         /// <summary>
-        /// Cipher mode to use
+        /// CipherMode to use when encrypting a file, when unsure, use CBC.
         /// </summary>
         [DefaultValue(Cipher.CBC)]
         public Cipher CipherMode { get; set; }
 
         /// <summary>
-        /// Padding mode to use
+        /// Padding mode to use when encrypting a file, when unsure, use PKCS7.
         /// </summary>
         [DefaultValue(Padding.PKCS7)]
         public Padding PaddingMode { get; set; }
 
         /// <summary>
-        /// Possible key sizes: 128, 256, 512
+        /// Key size for file encryption, when unsure, use 256.
         /// </summary>
         [DefaultValue(KeySize.AES256)]
         public KeySize KeySize { get; set; }
 
         /// <summary>
-        /// Possible options: 8, 16, 32, 64
+        /// Array length used in defining the salt byte array of encryption. When Decrypting by OpenSSL, use 8.
         /// </summary>
         [DefaultValue(ByteArrayLength.Eight)]
         public ByteArrayLength ByteArrayLength { get; set; }
 
         /// <summary>
-        /// Possible options: OpenSSL, Other
+        /// Defines how the encrypted file is planned to be decrypted, when unsure, use Other.  "Salted__" is added to 
+        /// filename if OpenSSL is chosen as a decryption method.
         /// </summary>
         [DefaultValue(DecryptionMethod.Other)]
         public DecryptionMethod DecryptionMethod { get; set; }
