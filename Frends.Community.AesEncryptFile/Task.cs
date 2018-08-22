@@ -44,7 +44,6 @@ namespace Frends.Community.AesEncryptFile
                 ? Path.Combine(sourceFileInfo.DirectoryName, Guid.NewGuid().ToString())
                 : input.DestinationFile;
 
-
             using (var fileReader = new FileStream(input.SourceFile, FileMode.Open, FileAccess.Read))
             using (var aes = new AesManaged())
             {
@@ -154,7 +153,6 @@ namespace Frends.Community.AesEncryptFile
             }
 
             result.OutputPath = destinationFile;
-
             return result;
         }
     }
