@@ -1,20 +1,19 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <id>Frends.Community.AesEncryptFile</id>
+    <version>2.0.0</version>
+    <title>Frends.Community.AesEncryptFile</title>
+    <authors>HiQ Finland</authors>
+    <owners />
     <licenseUrl>https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Frends.Community.AesEncryptFile</description>
     <copyright>HiQ Finland</copyright>
-    <tags>Frends4 AES</tags>
+    <tags />
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="Frends.Tasks.Attributes" version="1.2.0" />
       </group>
     </dependencies>
     <frameworkAssemblies>
@@ -26,6 +25,7 @@
   </metadata>
   <files>
     <file src="bin\Release\Frends.Community.AesEncryptFile.dll" target="lib\net452\Frends.Community.AesEncryptFile.dll" />
+    <file src="bin\Release\Frends.Community.AesEncryptFile.xml" target="lib\net452\Frends.Community.AesEncryptFile.xml" />
     <file src="FrendsTaskMetadata.json" target="FrendsTaskMetadata.json" />
   </files>
 </package>

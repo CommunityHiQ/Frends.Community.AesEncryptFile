@@ -13,9 +13,9 @@ namespace Frends.Community.AesEncryptFile.Tests
         {
             try
             {
-                Task.Encrypt(
-                    new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFileThatDoesNotExist.txt" },
-                    new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.Sixteen, DecryptionMethod = DecryptionMethod.Other });
+                AesEncryptTask.AesEncryptFile(
+                    new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFileThatDoesNotExist.txt", Password = "54321"},
+                    new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.Sixteen, DecryptionMethod = DecryptionMethod.Other });
                 Assert.Fail();
             }
             catch (ArgumentException e)
@@ -24,54 +24,41 @@ namespace Frends.Community.AesEncryptFile.Tests
             }
         }
 
-       
-
         [TestMethod]
         public void Encrypt_ShouldEncryptFile_AES256ECB()
         {
-            Output result = Task.Encrypt(
-                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256ECB.ed", CipherMode = Cipher.ECB, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.ThirtyTwo, DecryptionMethod = DecryptionMethod.Other });
+            Output result = AesEncryptTask.AesEncryptFile(
+                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt", DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256ECB.ed", Password = "54321" },
+                new Options { CipherMode = Cipher.ECB, KeySize = KeySize.AES256, PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.ThirtyTwo, DecryptionMethod = DecryptionMethod.Other });
 
             FileInfo fi = new FileInfo(result.OutputPath);
-
             Assert.IsTrue(fi.Exists);
         }
 
         [TestMethod]
         public void Encrypt_ShouldEncryptFile_AES256CBC()
         {
-            Output result = Task.Encrypt(
-                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256CBC.ed", CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.SixtyFour, DecryptionMethod = DecryptionMethod.Other });
+            Output result = AesEncryptTask.AesEncryptFile(
+                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt", DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_AES256CBC.ed", Password = "54321" },
+                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, PaddingMode = Padding.PKCS7, ByteArrayLength = ByteArrayLength.SixtyFour, DecryptionMethod = DecryptionMethod.Other });
 
-            FileInfo fi = new FileInfo(result.OutputPath);
-
-            
+            FileInfo fi = new FileInfo(result.OutputPath);            
             Assert.IsTrue(fi.Exists);
-        
     }
-
-
         [TestMethod]
         public void Encrypt_ShouldEncryptFile_OpenSSLTest()
         {
-            
-            Output result = Task.Encrypt(
-                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt" },
-                new Options { DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_OpenSSL.ed", CipherMode = Cipher.CBC, KeySize = KeySize.AES256, Password = "54321", PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
+            Output result = AesEncryptTask.AesEncryptFile(
+                new Input { SourceFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\SourceFile.txt", DestinationFile = $@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles\Encrypted_OpenSSL.ed", Password = "54321"},
+                new Options { CipherMode = Cipher.CBC, KeySize = KeySize.AES256, PaddingMode = Padding.PKCS7, ByteArrayLength=ByteArrayLength.Eight, DecryptionMethod=DecryptionMethod.OpenSSL });
 
             FileInfo fi = new FileInfo(result.OutputPath);
-
             Assert.IsTrue(fi.Exists);
-
-
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-
             // AppDomain.CurrentDomain.BaseDirectory refers to Frends.Community.AesEncrypt.Tests\bin\Debug(or Release)\ -folder
             System.IO.DirectoryInfo di2 = new DirectoryInfo($@"{AppDomain.CurrentDomain.BaseDirectory}\TestFiles");
 
@@ -83,16 +70,10 @@ namespace Frends.Community.AesEncryptFile.Tests
                 }
 
             }
-
             var di1 = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..", "TestResults"));
 
             if (di1.Exists)
                 Directory.Delete(di1.FullName, true);
-
-
         }
-
-
-
     }
 }
