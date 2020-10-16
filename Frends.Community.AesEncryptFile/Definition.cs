@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using Frends.Tasks.Attributes;
+﻿#pragma warning disable 1591
 
-#pragma warning disable 1591
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Frends.Community.AesEncryptFile
 {
@@ -24,7 +24,7 @@ namespace Frends.Community.AesEncryptFile
     /// <summary>
     /// Byte array length used for salt
     /// </summary>
-    public enum ByteArrayLength { Eight=8, Sixteen=16, ThirtyTwo=32, SixtyFour=64 }
+    public enum ByteArrayLength { Eight = 8, Sixteen = 16, ThirtyTwo = 32, SixtyFour = 64 }
 
     /// <summary>
     /// Decryption target
@@ -39,7 +39,7 @@ namespace Frends.Community.AesEncryptFile
         /// File to encrypt
         /// </summary>
         [DefaultValue("c:\\temp\\file_to_encrypt.txt")]
-        [DefaultDisplayType(DisplayType.Text)]
+        [DisplayFormat(DataFormatString = "Text")]
         public string SourceFile { get; set; }
 
         /// <summary>
