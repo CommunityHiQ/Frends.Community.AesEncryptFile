@@ -86,4 +86,4 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request!
 | ----- | ----- |
 | 1.0.0 | First version. |
 | 2.0.0 | Task renamed and refactored, it is not backward compatible. Updated documentation. |
-| 2.0.1 | Converted to support .Net Framework 4.7.1 and .Net Standard 2.0
+| 2.1.0 | Converted to support .Net Framework 4.7.1 and .Net Standard 2.0
