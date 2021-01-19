@@ -14,7 +14,7 @@ namespace Frends.Community.AesEncryptFile
     {
         /// <summary>
         /// Encrypt a file with AES. Result file is prefixed with random generated salt bytes. Random GUID is used as filename if nothing is specified. "Salted__" is added to 
-        /// filename if OpenSSL is chosen as a decryption method.
+        /// filename if OpenSSL is chosen as a decryption method. Full documentation: https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>

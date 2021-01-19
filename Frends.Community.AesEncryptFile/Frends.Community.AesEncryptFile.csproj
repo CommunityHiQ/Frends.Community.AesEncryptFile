@@ -6,6 +6,7 @@
     <copyright>HiQ Finland</copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile</PackageProjectUrl>
+	<Description>Task for encrypt files using AES.</Description>
     <IncludeSource>true</IncludeSource>
     <PackageTags>Frends</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
