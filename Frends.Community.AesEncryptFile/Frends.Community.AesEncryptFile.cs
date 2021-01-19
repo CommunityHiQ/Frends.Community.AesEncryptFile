@@ -1,18 +1,20 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.ComponentModel;
+using System.Threading;
+using Microsoft.CSharp; // You can remove this if you don't need dynamic type in .NET Standard frends Tasks
 
 #pragma warning disable 1591
 
 namespace Frends.Community.AesEncryptFile
 {
-    public class AesEncryptTask
+    public static class AesEncryptTask
     {
         /// <summary>
         /// Encrypt a file with AES. Result file is prefixed with random generated salt bytes. Random GUID is used as filename if nothing is specified. "Salted__" is added to 
-        /// filename if OpenSSL is chosen as a decryption method.
+        /// filename if OpenSSL is chosen as a decryption method. Full documentation: https://github.com/CommunityHiQ/Frends.Community.AesEncryptFile
         /// </summary>
         /// <param name="input"></param>
         /// <param name="options"></param>
@@ -33,7 +35,7 @@ namespace Frends.Community.AesEncryptFile
             {
                 throw new ArgumentException("Source file does not exist!", "Input.SourcePath");
             }
-            if(string.IsNullOrWhiteSpace(input.Password))
+            if (string.IsNullOrWhiteSpace(input.Password))
             {
                 throw new ArgumentException("Options.Password was not properly defined", "Options.SourcePath");
             }
@@ -95,22 +97,22 @@ namespace Frends.Community.AesEncryptFile
                         break;
                 }
 
-               // set byte array length
-               int byteArrayLength = 0;
-               switch (options.ByteArrayLength)
-               {
-                   case ByteArrayLength.Eight:
-                       byteArrayLength = 8;
-                       break;
-                   case ByteArrayLength.Sixteen:
-                       byteArrayLength = 16;
-                       break;
-                   case ByteArrayLength.ThirtyTwo:
-                       byteArrayLength = 32;
-                       break;
-                   case ByteArrayLength.SixtyFour:
-                       byteArrayLength = 64;
-                       break;
+                // set byte array length
+                int byteArrayLength = 0;
+                switch (options.ByteArrayLength)
+                {
+                    case ByteArrayLength.Eight:
+                        byteArrayLength = 8;
+                        break;
+                    case ByteArrayLength.Sixteen:
+                        byteArrayLength = 16;
+                        break;
+                    case ByteArrayLength.ThirtyTwo:
+                        byteArrayLength = 32;
+                        break;
+                    case ByteArrayLength.SixtyFour:
+                        byteArrayLength = 64;
+                        break;
                 }
 
                 using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
